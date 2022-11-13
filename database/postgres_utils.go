@@ -26,3 +26,15 @@ func handleCloseRows(rows *sql.Rows) {
 		log.Fatal(err)
 	}
 }
+
+func mapFromRowsToTest(rows *sql.Rows) (*models.Test, error) {
+	test := models.Test{}
+
+	for rows.Next() {
+		if err := rows.Scan(&test.Id, &test.Name); err != nil {
+			return nil, err
+		}
+	}
+
+	return &test, nil
+}

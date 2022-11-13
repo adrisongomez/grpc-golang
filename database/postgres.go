@@ -5,7 +5,7 @@ import (
 	"database/sql"
 
 	"github.com/adrisongomez/grpc_golang/models"
-    _ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 type PostgresRepository struct {
@@ -41,7 +41,34 @@ func (repo *PostgresRepository) GetStudent(ctx context.Context, id string) (*mod
 		return nil, err
 	}
 
-    defer handleCloseRows(rows)
+	defer handleCloseRows(rows)
 
 	return mapFromRowsToStudent(rows)
 }
+
+func (repo *PostgresRepository) SetTest(ctx context.Context, test *models.Test) error {
+	_, err := repo.db.ExecContext(
+		ctx,
+		"INSERT INTO tests (id, name) VALUES ($1, $2)",
+		test.Id,
+		test.Name,
+	)
+	return err
+}
+
+func (repo *PostgresRepository) GetTest(ctx context.Context, id string) (*models.Test, error) {
+	rows, err := repo.db.QueryContext(
+		ctx,
+		"SELECT id, name FROM tests WHERE id = $1",
+		id,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer handleCloseRows(rows)
+
+	return mapFromRowsToTest(rows)
+}
+
