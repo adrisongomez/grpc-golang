@@ -2,12 +2,12 @@ syntax = "proto3";
 
 package student;
 
-option go_package = "github.com/adrisongomez/grpc_golang;studentpb";
+option go_package = "github.com/adrisongomez/grpc_golang/studentpb";
 
 message Student {
     string id = 1;
     string name = 2;
-    int32 age =3;
+    int32 age = 3;
 }
 
 message GetStudentRequest {
